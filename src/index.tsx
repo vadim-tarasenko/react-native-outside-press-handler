@@ -1,3 +1,2 @@
-export function multiply(a: number, b: number): Promise<number> {
-  return Promise.resolve(a * b);
-}
+export { OutsidePressController } from './containers/outside-press-controller';
+export { OutsidePressHandler } from './containers/outside-press-handler';
