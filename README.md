@@ -1,16 +1,15 @@
-# react-native-outside-press-handler
+<p align="center">
+<img src="./logo.png" alt='logo' width='40%'>
+</p>
 
-Easy handle outside press in react-native app
+Handle outside press in react-native application
 
 ## Advantages
 
+- Lightweight
 - Typesafe
 - Zero dependency
-- Lightweight
 
----
-![Alt text](./logo.svg)
-<img src="./logo.svg">
 ## Installation
 
 ```sh
@@ -20,7 +19,6 @@ npm install react-native-outside-press-handler
 yarn add react-native-outside-press-handler
 ```
 
----
 
 ## Usage
 
@@ -58,13 +56,11 @@ export const MyBeautifulComponent: FC = () => {
 }
 ```
 
----
 
 ## Contributing
 
 See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
 
----
 
 ## License
 
