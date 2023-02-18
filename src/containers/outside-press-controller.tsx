@@ -1,15 +1,28 @@
 import React, { useRef, useCallback, FC, MutableRefObject } from 'react';
-import { View, GestureResponderEvent } from 'react-native';
+import {
+  View,
+  GestureResponderEvent,
+  StyleProp,
+  ViewStyle,
+} from 'react-native';
 // contexts
-import { OutsideClicksContext } from 'contexts/outside-press.context';
+import { OutsideClicksContext } from '../contexts/outside-press.context';
 // utils
-import { isPressInsideComponent } from 'utils/press.utils';
+import { isPressInsideComponent } from '../utils/press.utils';
+// types
+import type { ChildrenProp } from '../types/react.types';
 
-export const OutsidePressController: FC = ({ children }) => {
+type OutsidePressControllerProps = ChildrenProp & {
+  style?: StyleProp<ViewStyle>;
+};
+
+export const OutsidePressController: FC<OutsidePressControllerProps> = ({
+  children,
+  style,
+}) => {
   const subscribers = useRef<
     { element: MutableRefObject<any>; cb: () => void }[]
   >([]);
-
   const subscribeOutsideClicks = useCallback(
     (element: MutableRefObject<any>, cb: () => void) => {
       const newSubscriber = { element, cb };
@@ -17,10 +30,29 @@ export const OutsidePressController: FC = ({ children }) => {
       subscribers.current = [...subscribers.current, newSubscriber];
 
       return () => {
-        subscribers.current.filter(
+        subscribers.current = subscribers.current.filter(
           (subscriber) => subscriber !== newSubscriber
         );
       };
+    },
+    []
+  );
+
+  const handleStartShouldSetResponder = useCallback(
+    (ev: GestureResponderEvent) => {
+      ev.persist();
+
+      subscribers.current.forEach((subscriber) => {
+        try {
+          if (!isPressInsideComponent(ev.target, subscriber.element.current)) {
+            subscriber.cb();
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      });
+
+      return true;
     },
     []
   );
@@ -32,20 +64,8 @@ export const OutsidePressController: FC = ({ children }) => {
       }}
     >
       <View
-        onStartShouldSetResponder={(ev: GestureResponderEvent) => {
-          ev.persist();
-
-          subscribers.current.forEach((subscriber) => {
-            if (
-              !isPressInsideComponent(ev.target, subscriber.element.current)
-            ) {
-              console.log('clicked outside');
-              subscriber.cb();
-            }
-          });
-
-          return true;
-        }}
+        style={style}
+        onStartShouldSetResponder={handleStartShouldSetResponder}
       >
         {children}
       </View>

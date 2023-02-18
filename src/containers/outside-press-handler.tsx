@@ -1,13 +1,20 @@
 import React, { useRef, useContext, useEffect, FC } from 'react';
-import { View } from 'react-native';
+import { StyleProp, View, ViewStyle } from 'react-native';
 // contexts
-import { OutsideClicksContext } from 'contexts/outside-press.context';
+import { OutsideClicksContext } from '../contexts/outside-press.context';
+import type { ChildrenProp } from '../types/react.types';
 
-export const OutsidePressHandler: FC<{ onOutsidePress: () => void }> = ({
+type OutsidePressHandlerProps = ChildrenProp & {
+  onOutsidePress: () => void;
+  style?: StyleProp<ViewStyle>;
+};
+
+export const OutsidePressHandler: FC<OutsidePressHandlerProps> = ({
   children,
   onOutsidePress,
+  style,
 }) => {
-  const ref = useRef<any>(null);
+  const ref = useRef<View>(null);
   const outsideClicksContext = useContext(OutsideClicksContext);
 
   useEffect(() => {
@@ -21,5 +28,9 @@ export const OutsidePressHandler: FC<{ onOutsidePress: () => void }> = ({
     };
   }, [outsideClicksContext, onOutsidePress]);
 
-  return <View ref={ref}>{children}</View>;
+  return (
+    <View ref={ref} style={style}>
+      {children}
+    </View>
+  );
 };

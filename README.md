@@ -28,7 +28,7 @@ yarn add react-native-outside-press-handler
 import { OutsidePressController } from 'react-native-outside-press-handler';
 
 export const App: FC = () => (
-  <OutsidePressController>
+  <OutsidePressController style={{ flex: 1 }}>
     {/* Rest of your app code */}
   </OutsidePressController>
 )
